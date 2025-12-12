@@ -1,0 +1,28 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "repen"
+version = "0.0.1"
+description = "Automation engine for report generation"
+authors = [
+  { name="Alexander Sherstnev", email="a.sharstniou.dev@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+
+[tool.poetry]
+packages = [{ include = "repen", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.12.0"
+isort = "^7.0.0"
+pyright = "^1.1.407"
