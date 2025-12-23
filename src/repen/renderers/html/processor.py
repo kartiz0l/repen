@@ -1,28 +1,30 @@
-from abc import ABC, abstractmethod
+from typing import Optional
 
-from repen.components.base import Component
-from repen.layouts.base import Layout
-
-
-class HTMLLayoutProcessor(ABC):
-    @abstractmethod
-    def begin(self, layout: Layout) -> str:
-        pass
-
-    @abstractmethod
-    def end(self, layout: Layout) -> str:
-        pass
-
-    @abstractmethod
-    def begin_component(self, layout: Layout, component: Component) -> str:
-        pass
-
-    @abstractmethod
-    def end_component(self, layout: Layout, component: Component) -> str:
-        pass
+from repen.components import Component, Composite
 
 
-class HTMLComponentProcessor(ABC):
-    @abstractmethod
-    def process(self, component: Component) -> str:
-        pass
+class HTMLComponentProcessor:
+    def process(self, component: Component) -> Optional[str]:
+        return None
+
+
+class HTMLCompositeProcessor:
+    def begin(self, composite: Composite) -> Optional[str]:
+        return None
+
+    def begin_component(
+        self,
+        composite: Composite,
+        component: Component,
+    ) -> Optional[str]:
+        return None
+
+    def end_component(
+        self,
+        composite: Composite,
+        component: Component,
+    ) -> Optional[str]:
+        return None
+
+    def end(self, composite: Composite) -> Optional[str]:
+        return None

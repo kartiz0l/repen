@@ -1,12 +1,9 @@
 from repen.renderers.base import Renderer
-from repen.renderers.html import (HTMLComponentProcessor, HTMLLayoutProcessor,
-                                  HTMLRenderer)
+from repen.renderers.debug import DebugRenderer
+from repen.renderers.html import HTMLRenderer
 
 __all__ = [
-    # Base
     "Renderer",
-    # HTML
+    "DebugRenderer",
     "HTMLRenderer",
-    "HTMLComponentProcessor",
-    "HTMLLayoutProcessor",
 ]

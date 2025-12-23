@@ -1,9 +1,10 @@
 from repen.adapters.base import ComponentAdapter
-from repen.adapters.plot import MatplotlibPlotComponentAdapter
-from repen.adapters.text import TextComponentAdapter
+from repen.adapters.registry import AdapterRegistry
+from repen.adapters.text import TextAdapter
+
+AdapterRegistry.register(TextAdapter())
 
 __all__ = [
     "ComponentAdapter",
-    "TextComponentAdapter",
-    "MatplotlibPlotComponentAdapter",
+    "AdapterRegistry",
 ]
