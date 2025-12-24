@@ -14,6 +14,7 @@ class Report:
         self._components: List[Component] = []
         self._layout: Layout = metadata.pop("layout", VStack(**metadata))
         self._renderer: Renderer = metadata.pop("renderer", HTMLRenderer(**metadata))
+        self._debug: bool = metadata.pop("debug", False)
 
     def add(self, item: Any, **metadata) -> Report:
         self._components.append(AdapterRegistry.create(item, **metadata))
@@ -25,6 +26,11 @@ class Report:
 
         layout = self._layout.__class__(**self._layout.metadata)
         layout.add_all(*self._components)
+
+        if self._debug:
+            debug_renderer = DebugRenderer()
+            print(debug_renderer.render(self._title, layout))
+
         return self._renderer.render(self._title, layout)
 
     def save(self, filepath: Union[str, Path]) -> None:

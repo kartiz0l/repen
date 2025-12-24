@@ -1,27 +1,34 @@
 from typing import Dict, List, Type, Union
 
 from repen.components import (Component, Composite, Text, TextBlock, TextLines,
-                              TextSpan)
+                              TextSpan, VStack)
 from repen.renderers.base import Renderer
 from repen.renderers.html.processor import (HTMLComponentProcessor,
                                             HTMLCompositeProcessor)
+from repen.renderers.html.processor_layout import HTMLVStackProcessor
 from repen.renderers.html.processor_text import (HTMLTextBlockProcessor,
                                                  HTMLTextLinesProcessor,
                                                  HTMLTextProcessor,
                                                  HTMLTextSpanProcessor)
+from repen.renderers.html.theme_registry import HTMLThemeRegistry
 
 
 class HTMLRenderer(Renderer):
     def __init__(self, **metadata) -> None:
         super().__init__(**metadata)
+        self._theme: str = metadata.get("theme", "default")
+        self._theme_registry = HTMLThemeRegistry()
         self._output: List[str] = []
         self._component_processors: Dict[Type, HTMLComponentProcessor] = {
             Text: HTMLTextProcessor(),
         }
         self._composite_processors: Dict[Type, HTMLCompositeProcessor] = {
+            # Text
             TextBlock: HTMLTextBlockProcessor(),
             TextSpan: HTMLTextSpanProcessor(),
             TextLines: HTMLTextLinesProcessor(),
+            # Layout
+            VStack: HTMLVStackProcessor(),
         }
 
     def render(self, title: str, root: Component) -> Union[str, bytes]:
@@ -36,6 +43,7 @@ class HTMLRenderer(Renderer):
 <html>
 <head>
     <title>{title}</title>
+    <style>{self._theme_registry.css(self._theme)}</style>
 </head>
 <body>
 """
@@ -59,13 +67,13 @@ class HTMLRenderer(Renderer):
                 self._output.append(composite_begin)
 
             for child in component.children:
-                composite_begin_component = processor.begin_component(component, child)
+                composite_begin_component = processor.begin_child(component, child)
                 if composite_begin_component is not None:
                     self._output.append(composite_begin_component)
 
                 self.component(child)
 
-                composite_end_component = processor.end_component(component, child)
+                composite_end_component = processor.end_child(component, child)
                 if composite_end_component is not None:
                     self._output.append(composite_end_component)
 

@@ -2,23 +2,23 @@ import matplotlib.pyplot as plt
 from repen import Report
 
 if __name__ == "__main__":
-    basic_report = Report(title="TEST")
+    basic_report = Report(title="TEST", debug=True)
 
     fig, ax = plt.subplots()
     ax.plot([1, 2, 3], [4, 5, 6])
 
     basic_report.add("# Lorem Ipsum").add(
         """
-# **Complete** Markdown *Demo*
+# **Complete** Markdown ++*Demo*++
 
-**Bold text** with *italic inside* and ~~strikethrough~~.
+**Bold text** with *italic inside* and ~~strikethrough~~.  
 ***Triple*** formatting shows **bold *and italic***.
 
 `Code blocks` ignore **formatting**: `print("**Hello**")` prints literally.
 
 ## **Nesting** Examples
 
-**Outer bold with *inner italic* and ~~strikethrough~~**. ***All three*** combined.
+**Outer bold with *inner italic* and ~~strikethrough~~**. ***All three*** ++combined++.
 
 ### **Edge** Cases
 
@@ -30,5 +30,4 @@ if __name__ == "__main__":
         """
     ).add(fig)
 
-    # print(basic_report.render())
     basic_report.save("test.html")

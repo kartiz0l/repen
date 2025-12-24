@@ -55,3 +55,7 @@ class TextSpan(Composite):
 
 class TextLines(Composite):
     pass
+
+
+class TextSection(Composite):
+    pass

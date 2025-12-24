@@ -1,30 +1,26 @@
 from typing import Optional
 
 from repen.components import Component, Composite
+from repen.renderers.html.processor import HTMLCompositeProcessor
 
 
-class HTMLComponentProcessor:
-    def process(self, component: Component) -> Optional[str]:
-        return None
-
-
-class HTMLCompositeProcessor:
+class HTMLVStackProcessor(HTMLCompositeProcessor):
     def begin(self, composite: Composite) -> Optional[str]:
-        return None
+        return "<div class='layout vstack'>"
 
     def begin_child(
         self,
         composite: Composite,
         component: Component,
     ) -> Optional[str]:
-        return None
+        return "<div class='item'>"
 
     def end_child(
         self,
         composite: Composite,
         component: Component,
     ) -> Optional[str]:
-        return None
+        return "</div>"
 
     def end(self, composite: Composite) -> Optional[str]:
-        return None
+        return "</div>"

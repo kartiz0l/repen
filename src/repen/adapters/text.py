@@ -2,8 +2,8 @@ import re
 from typing import Any, Optional
 
 from repen.adapters.base import ComponentAdapter
-from repen.components import (Component, Text, TextBlock, TextLines, TextStyle,
-                              TextVariant, VStack)
+from repen.components import (Component, Text, TextBlock, TextLines,
+                              TextSection, TextStyle, TextVariant)
 from repen.components.text import TextSpan
 
 
@@ -12,24 +12,23 @@ class TextAdapter(ComponentAdapter):
         return isinstance(raw_data, str)
 
     def adapt(self, raw_data: Any, **metadata: Any) -> Component:
-        text = str(raw_data).strip()
+        text = str(raw_data)
 
         # Empty string - skip
         if not text:
             return Text("", **metadata)
 
-        paragraphs = re.split(r"\n\s*\n", text)
+        paragraphs = re.split(r"\n\n", text)
         if len(paragraphs) == 1:
-            return self._parse_paragraph(paragraphs[0].strip(), **metadata)
+            return self._parse_paragraph(paragraphs[0], **metadata)
 
-        stack = VStack(**metadata)
+        stack = TextSection(**metadata)
         for paragraph in paragraphs:
-            if paragraph.strip():
-                stack.add(self._parse_paragraph(paragraph.strip(), **metadata))
+            stack.add(self._parse_paragraph(paragraph, **metadata))
         return stack
 
     def _parse_paragraph(self, text: str, **metadata) -> Component:
-        lines = [line.strip() for line in text.split("\n") if line.strip()]
+        lines = [line.strip() for line in text.split("  \n")]
         if len(lines) == 1:
             return self._parse_line(lines[0], **metadata)
 
@@ -42,8 +41,6 @@ class TextAdapter(ComponentAdapter):
         return block
 
     def _parse_line(self, line: str, **metadata) -> Component:
-        line = line.strip()
-
         heading_match = re.match(r"^(#+)\s+(.+)$", line)
         if heading_match:
             level = len(heading_match.group(1))
