@@ -21,13 +21,18 @@ class AdapterRegistry:
 
     @classmethod
     def create(cls, raw_data: Any, **metadata: Any) -> Component:
-        for adapter in cls._adapters:
-            if adapter.can_adapt(raw_data, **metadata):
-                try:
-                    return adapter.adapt(raw_data, **metadata)
-                except:
-                    # Skip any fails
-                    continue
+        possible_adapters: List[ComponentAdapter] = [
+            adapter
+            for adapter in cls._adapters
+            if adapter.can_adapt(raw_data, **metadata)
+        ]
+        if len(possible_adapters) > 0:
+            best_adapter = max(possible_adapters, key=lambda a: a.priority)
+            try:
+                return best_adapter.adapt(raw_data, **metadata)
+            except:
+                # Skip any fails
+                pass
 
         # Fallback to GenericComponent
         try:

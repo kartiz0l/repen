@@ -1,10 +1,11 @@
 from typing import Dict, List, Type, Union
 
-from repen.components import (Component, Composite, Text, TextBlock, TextLines,
-                              TextSpan, VStack)
+from repen.components import (Component, Composite, Image, Text, TextBlock,
+                              TextLines, TextSpan, VStack)
 from repen.renderers.base import Renderer
 from repen.renderers.html.processor import (HTMLComponentProcessor,
                                             HTMLCompositeProcessor)
+from repen.renderers.html.processor_image import HTMLImageProcessor
 from repen.renderers.html.processor_layout import HTMLVStackProcessor
 from repen.renderers.html.processor_text import (HTMLTextBlockProcessor,
                                                  HTMLTextLinesProcessor,
@@ -21,6 +22,7 @@ class HTMLRenderer(Renderer):
         self._output: List[str] = []
         self._component_processors: Dict[Type, HTMLComponentProcessor] = {
             Text: HTMLTextProcessor(),
+            Image: HTMLImageProcessor(),
         }
         self._composite_processors: Dict[Type, HTMLCompositeProcessor] = {
             # Text
