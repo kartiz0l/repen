@@ -1,5 +1,6 @@
+from abc import ABC
 from enum import Enum
-from typing import Optional, Set
+from typing import Optional, Set, cast
 
 from repen.components.base import Component, Composite
 
@@ -23,7 +24,11 @@ class TextStyle(Enum):
     CODE = "code"
 
 
-class Text(Component):
+class TextLike(Component, ABC):
+    pass
+
+
+class Text(TextLike):
     def __init__(
         self,
         content: str,
@@ -34,28 +39,39 @@ class Text(Component):
         self.content: str = content
         self.styles: Set[TextStyle] = styles or set()
 
+    def copy(self) -> Component:
+        new_instance = cast(Text, super().copy())
+        new_instance.content = self.content
+        new_instance.styles = self.styles
+        return new_instance
+
     def __repr__(self) -> str:
         style_str = ", ".join(s.value for s in self.styles)
         content_preview = self.content[: min(30, len(self.content))]
         return f"{self.__class__.__name__} (content='{content_preview}{'...' if len(self.content) > 30 else ''}', styles=[{style_str}])"
 
 
-class TextBlock(Composite):
+class TextBlock(TextLike, Composite):
     def __init__(self, variant: TextVariant, **metadata) -> None:
         super().__init__(**metadata)
         self.variant = variant
+
+    def copy(self) -> Component:
+        new_instance = cast(TextBlock, super().copy())
+        new_instance.variant = self.variant
+        return new_instance
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} (variant={self.variant.value})"
 
 
-class TextSpan(Composite):
+class TextSpan(TextLike, Composite):
     pass
 
 
-class TextLines(Composite):
+class TextLines(TextLike, Composite):
     pass
 
 
-class TextSection(Composite):
+class TextSection(TextLike, Composite):
     pass

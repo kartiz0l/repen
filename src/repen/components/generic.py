@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 from repen.components.base import Component
 
@@ -7,6 +7,11 @@ class Generic(Component):
     def __init__(self, raw_data: Any, **metadata: Any) -> None:
         super().__init__(**metadata)
         self._raw_data = raw_data
+
+    def copy(self) -> Component:
+        new_instance: Generic = cast(Generic, super().copy())
+        new_instance._raw_data = self._raw_data
+        return new_instance
 
     def __repr__(self) -> str:
         raw_data = str(self._raw_data)

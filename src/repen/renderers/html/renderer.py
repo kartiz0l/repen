@@ -1,10 +1,11 @@
 from typing import Dict, List, Type, Union
 
-from repen.components import (Component, Composite, Image, Text, TextBlock,
-                              TextLines, TextSpan, VStack)
+from repen.components import (Component, Composite, Figure, Image, Text,
+                              TextBlock, TextLines, TextSpan, VStack)
 from repen.renderers.base import Renderer
 from repen.renderers.html.processor import (HTMLComponentProcessor,
                                             HTMLCompositeProcessor)
+from repen.renderers.html.processor_figure import HTMLFigureProcessor
 from repen.renderers.html.processor_image import HTMLImageProcessor
 from repen.renderers.html.processor_layout import HTMLVStackProcessor
 from repen.renderers.html.processor_text import (HTMLTextBlockProcessor,
@@ -31,6 +32,8 @@ class HTMLRenderer(Renderer):
             TextLines: HTMLTextLinesProcessor(),
             # Layout
             VStack: HTMLVStackProcessor(),
+            # Figure
+            Figure: HTMLFigureProcessor(),
         }
 
     def render(self, title: str, root: Component) -> Union[str, bytes]:

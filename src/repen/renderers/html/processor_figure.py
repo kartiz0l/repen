@@ -1,28 +1,26 @@
-from typing import Optional, cast
+from typing import Optional
 
-from repen.components import Component, Composite, VStack
+from repen.components import Component, Composite, TextLike
 from repen.renderers.html.processor import HTMLCompositeProcessor
 
 
-class HTMLVStackProcessor(HTMLCompositeProcessor):
+class HTMLFigureProcessor(HTMLCompositeProcessor):
     def begin(self, composite: Composite) -> Optional[str]:
-        vstack = cast(VStack, composite)
-        style = f"style='--spacing: var(--spacing-{vstack.spacing.value})'"
-        return f"<div class='layout vstack' {style}>"
+        return "<figure>"
 
     def begin_child(
         self,
         composite: Composite,
         component: Component,
     ) -> Optional[str]:
-        return f"<div class='item'>"
+        return "<figcaption>" if isinstance(component, TextLike) else None
 
     def end_child(
         self,
         composite: Composite,
         component: Component,
     ) -> Optional[str]:
-        return "</div>"
+        return "</figcaption>" if isinstance(component, TextLike) else None
 
     def end(self, composite: Composite) -> Optional[str]:
-        return "</div>"
+        return "</figure>"

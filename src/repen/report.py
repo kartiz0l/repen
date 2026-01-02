@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, List, Union, cast
 
 from repen.adapters import AdapterRegistry
-from repen.components import Component, Layout, VStack
+from repen.components import Component, Layout, Spacing, VStack
 from repen.renderers import DebugRenderer, HTMLRenderer, Renderer
 
 
@@ -12,7 +12,9 @@ class Report:
     def __init__(self, **metadata) -> None:
         self._title: str = metadata.pop("title", "")
         self._components: List[Component] = []
-        self._layout: Layout = metadata.pop("layout", VStack(**metadata))
+        self._layout: Layout = metadata.pop(
+            "layout", VStack(spacing=Spacing.MD, **metadata)
+        )
         self._renderer: Renderer = metadata.pop("renderer", HTMLRenderer(**metadata))
         self._debug: bool = metadata.pop("debug", False)
 
@@ -24,7 +26,7 @@ class Report:
         if len(self._components) == 0:
             raise ValueError("No any data added into report.")
 
-        layout = self._layout.__class__(**self._layout.metadata)
+        layout = cast(Layout, self._layout.copy())
         layout.add_all(*self._components)
 
         if self._debug:

@@ -15,9 +15,6 @@ class ImageAdapter(ComponentAdapter):
     def _bytes_to_base64(self, data: bytes) -> str:
         return base64.b64encode(data).decode("utf-8")
 
-    def _is_svg_content(self, content: str) -> bool:
-        return content.strip().startswith("<svg")
-
 
 class PathImageAdapter(ImageAdapter):
     def can_adapt(self, raw_data: Any, **metadata: Any) -> bool:
@@ -26,7 +23,6 @@ class PathImageAdapter(ImageAdapter):
 
         try:
             path = Path(raw_data)
-            print(path, path.exists())
             if not path.exists():
                 return False
 

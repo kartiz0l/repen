@@ -36,7 +36,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  text-wrap: pretty;
+  text-wrap: wrap;
 }
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
@@ -72,6 +72,7 @@ class HTMLDefaultTheme(HTMLTheme):
             "color-border": "#e5e7eb",
             "color-border-light": "#f3f4f6",
             # Spacing
+            "spacing-0": "0",
             "spacing-xs": "0.25rem",
             "spacing-sm": "0.5rem",
             "spacing-md": "1rem",
@@ -103,10 +104,13 @@ body {{
 
 .layout {{
     width: 100%;
+    max-width: var(--layout-max-width);
 }}
 
 .layout.vstack {{
-    max-width: var(--layout-max-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing, 0);
     margin: 0 auto;
 }}
 

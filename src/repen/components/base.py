@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Any, List, Tuple, final
+from typing import Any, List, Tuple, cast, final
 
 
 class Component(ABC):
     def __init__(self, **metadata: Any) -> None:
         self.metadata = metadata
+
+    def copy(self) -> Component:
+        return self.__class__(**self.metadata)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} ()"
@@ -16,6 +19,13 @@ class Composite(Component):
     def __init__(self, **metadata: Any) -> None:
         super().__init__(**metadata)
         self._children: List[Component] = []
+
+    def copy(self) -> Component:
+        new_instance = cast(Composite, super().copy())
+        for child in self._children:
+            new_instance.add(child.copy())
+
+        return new_instance
 
     def add(self, component: Component) -> Composite:
         self._children.append(component)
