@@ -118,6 +118,12 @@ body {{
     display: block;
 }}
 
+.layout.vstack .item img,
+.layout.vstack .item figure > img,
+.layout.vstack .item figure > svg {{
+    margin: 0 auto;
+}}
+
 .bold {{
     font-weight: bold;
 }}
