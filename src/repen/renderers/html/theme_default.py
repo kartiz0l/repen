@@ -94,12 +94,16 @@ class HTMLDefaultTheme(HTMLTheme):
 
 body {{
     background-color: var(--color-bg);
-    color: var(--color-text);
+    color: var(--color-text-light);
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
     margin: 0;
     padding: 0;
+}}
+
+h1, h2, h3, h4, h5, h6 {{
+    color: var(--color-text);
 }}
 
 .layout {{
@@ -159,6 +163,7 @@ body {{
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
+    color: var(--color-text);
 }}
 
 .metric .label {{
