@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import cast
 
 from repen.components.base import Component
 
@@ -20,10 +19,7 @@ class Image(Component):
         self.image_format = image_format
 
     def copy(self) -> Component:
-        new_instance = cast(Image, super().copy())
-        new_instance.image_data = self.image_data
-        new_instance.image_format = self.image_format
-        return new_instance
+        return Image(self.image_data, self.image_format, **self.metadata)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} (format='{self.image_format.value}')"

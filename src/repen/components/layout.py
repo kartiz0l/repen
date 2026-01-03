@@ -1,17 +1,6 @@
-from enum import Enum
-from typing import Optional, cast
+from typing import cast
 
-from repen.components.base import Component, Composite
-
-
-class Spacing(Enum):
-    NONE = "0"
-    XS = "xs"
-    SM = "sm"
-    MD = "md"
-    LG = "lg"
-    XL = "xl"
-    XXL = "2xl"
+from repen.components.base import Component, Composite, Spacing
 
 
 class Layout(Composite):

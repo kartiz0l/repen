@@ -40,10 +40,7 @@ class Text(TextLike):
         self.styles: Set[TextStyle] = styles or set()
 
     def copy(self) -> Component:
-        new_instance = cast(Text, super().copy())
-        new_instance.content = self.content
-        new_instance.styles = self.styles
-        return new_instance
+        return Text(self.content, self.styles, **self.metadata)
 
     def __repr__(self) -> str:
         style_str = ", ".join(s.value for s in self.styles)
@@ -57,9 +54,7 @@ class TextBlock(TextLike, Composite):
         self.variant = variant
 
     def copy(self) -> Component:
-        new_instance = cast(TextBlock, super().copy())
-        new_instance.variant = self.variant
-        return new_instance
+        return TextBlock(self.variant, **self.metadata)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} (variant={self.variant.value})"

@@ -1,7 +1,18 @@
 from __future__ import annotations
 
 from abc import ABC
+from enum import Enum
 from typing import Any, List, Tuple, cast, final
+
+
+class Spacing(Enum):
+    NONE = "0"
+    XS = "xs"
+    SM = "sm"
+    MD = "md"
+    LG = "lg"
+    XL = "xl"
+    XXL = "2xl"
 
 
 class Component(ABC):

@@ -23,9 +23,6 @@ class Report:
         return self
 
     def render(self) -> Union[str, bytes]:
-        if len(self._components) == 0:
-            raise ValueError("No any data added into report.")
-
         layout = cast(Layout, self._layout.copy())
         layout.add_all(*self._components)
 

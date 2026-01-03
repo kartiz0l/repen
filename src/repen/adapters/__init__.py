@@ -1,9 +1,16 @@
 from repen.adapters.base import ComponentAdapter
 from repen.adapters.figure import (FigureFromTupleAdapter,
                                    MatplotlibFigureAdapter)
-from repen.adapters.image import BytesImageAdapter, PathImageAdapter
+from repen.adapters.image import (BytesImageAdapter, PathImageAdapter,
+                                  SVGImageAdapter)
+from repen.adapters.metric import (MetricsFromDictAdapter,
+                                   MetricsFromListAdapter)
 from repen.adapters.registry import AdapterRegistry
 from repen.adapters.text import TextAdapter
+
+# Metrics
+AdapterRegistry.register(MetricsFromDictAdapter())
+AdapterRegistry.register(MetricsFromListAdapter())
 
 # Figure
 AdapterRegistry.register(FigureFromTupleAdapter())
@@ -18,6 +25,7 @@ except:
 # Image
 AdapterRegistry.register(PathImageAdapter())
 AdapterRegistry.register(BytesImageAdapter())
+AdapterRegistry.register(SVGImageAdapter())
 
 try:
     import PIL

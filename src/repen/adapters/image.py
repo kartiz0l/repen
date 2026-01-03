@@ -1,6 +1,7 @@
 import base64
 import io
 import os
+import re
 from pathlib import Path, PurePath
 from typing import Any, cast
 
@@ -127,3 +128,17 @@ class PillowImageAdapter(ImageAdapter):
         image_data = self._bytes_to_base64(content)
 
         return Image(image_data, image_format, **metadata)
+
+
+class SVGImageAdapter(ImageAdapter):
+    def can_adapt(self, raw_data: Any, **metadata: Any) -> bool:
+        if isinstance(raw_data, str):
+            svg_match = re.search(r"<svg.*</svg>", str(raw_data), re.DOTALL)
+            return True if svg_match else False
+        return False
+
+    def adapt(self, raw_data: Any, **metadata: Any) -> Component:
+        svg_content = str(raw_data)
+        svg_match = re.search(r"<svg.*</svg>", svg_content, re.DOTALL)
+        clean_svg = svg_match.group(0) if svg_match else svg_content
+        return Image(clean_svg, ImageFormat.SVG, **metadata)

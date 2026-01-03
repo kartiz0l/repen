@@ -83,7 +83,7 @@ class HTMLDefaultTheme(HTMLTheme):
             "font-family-base": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
             "font-family-mono": "'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace",
             "font-size-base": "16px",
-            "line-height-base": "1.6",
+            "line-height-base": "1.4",
             # Layout
             "layout-max-width": "800px",
         }
@@ -147,5 +147,49 @@ body {{
     //box-decoration-break: clone;
     //padding: .1rem .3rem .2rem;
     //border-radius: .2rem;
+}}
+
+.metrics-group {{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing, --spacing-md) 0.5em;
+}}
+
+.metric {{
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+}}
+
+.metric .label {{
+    grid-column: 1;
+    min-width: 150px;
+    max-width: 350px;
+}}
+
+.metric .value {{
+    grid-column: 2;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    font-weight: bold;
+}}
+
+.metric.highlight .value {{
+    color: var(--color-primary);
+}}
+
+.metric.success .value {{
+    color: var(--color-success);
+}}
+
+.metric.warning .value {{
+    color: var(--color-warning);
+}}
+
+.metric.danger .value {{
+    color: var(--color-danger);
 }}
         """
