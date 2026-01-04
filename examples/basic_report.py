@@ -1,59 +1,40 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from PIL import Image as PILImage
 from repen import Report
 
-if __name__ == "__main__":
-    basic_report = Report(title="TEST", debug=False)
+# Create a report
+report = Report(title="Sales Analysis Q4 2023")
 
-    fig, ax = plt.subplots()
-    ax.plot([1, 2, 3], [4, 5, 6])
+# Add content - Repen automatically adapts different data types
+report.add("# Executive Summary")
+report.add("Monthly sales performance with **key metrics** and trends.")
 
-    with open("/home/kartiz0l/downloads/9.jpg", "rb") as f:
-        image_content = f.read()
+# Add metrics
+report.add(
+    {
+        "Revenue": ("$1.2M", "USD", "highlight"),
+        "Growth": ("15.2%", None, "success"),
+        "Customers": (1250, "active", "default"),
+    }
+)
 
-    im = PILImage.open("/home/kartiz0l/downloads/image.jpeg")
+# Add a pandas DataFrame
+df = pd.DataFrame(
+    {
+        "Month": ["Oct", "Nov", "Dec"],
+        "Sales": [350000, 420000, 430000],
+        "Growth": ["12%", "20%", "2.4%"],
+    }
+)
+report.add(df)
 
-    dates = pd.date_range("20130101", periods=6)
-    df = pd.DataFrame(np.random.randn(6, 4), index=dates, columns=list("ABCD"))  # type: ignore
+# Add a matplotlib figure
+fig, ax = plt.subplots()
+ax.plot([1, 2, 3], [350, 420, 430])
+ax.set_xlabel("Month")
+ax.set_ylabel("Sales (K)")
+ax.set_title("Sales Trend")
+report.add(fig)
 
-    basic_report.add("# Lorem Ipsum").add(
-        """
-# **Complete** Markdown ++*Demo*++
-
-**Bold text** with *italic inside* and ~~strikethrough~~.  
-***Triple*** formatting shows **bold *and italic***.
-
-`Code blocks` ignore **formatting**: `print("**Hello**")` prints literally.
-
-## **Nesting** Examples
-
-**Outer bold with *inner italic* and ~~strikethrough~~**. ***All three*** ++combined++.
-
-### **Edge** Cases
-
-**Bold ends **here** and new bold starts**. *Same for *italic**.
-
- ~~Invalid ~~crossing~~ but handled~~.
-
-**Final *sentence* with `code` and ~~formatting~~.**
-        """
-    ).add(("/home/kartiz0l/downloads/2025-12-22-134856_hyprshot.png", "TEST")).add(
-        image_content
-    ).add(
-        im
-    )
-
-    basic_report.add(
-        (
-            fig,
-            "**Lorem Ipsum** is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-        )
-    )
-
-    basic_report.add(df)
-
-    print(df)
-
-    basic_report.save("test.html")
+# Render and save
+report.save("sales_report.html")

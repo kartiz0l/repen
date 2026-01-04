@@ -13,7 +13,8 @@ class Report:
         self._title: str = metadata.pop("title", "")
         self._components: List[Component] = []
         self._layout: Layout = metadata.pop(
-            "layout", VStack(spacing=Spacing.MD, **metadata)
+            "layout",
+            VStack(spacing=Spacing.MD, **metadata),
         )
         self._renderer: Renderer = metadata.pop("renderer", HTMLRenderer(**metadata))
         self._debug: bool = metadata.pop("debug", False)

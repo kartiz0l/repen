@@ -34,7 +34,7 @@ class AdapterRegistry:
                 # Skip any fails
                 pass
 
-        # Fallback to GenericComponent
+        # Fallback to Generic
         try:
             return Generic(raw_data, **metadata)
         except Exception as e:

@@ -76,9 +76,7 @@ class HTMLRenderer(Renderer):
         self._output.append(
             """
        <script>
-            $("table").each(function() {{
-                $(this).DataTable();
-            }});
+            $("table").dataTable();
        </script>
    </body>
 </html>

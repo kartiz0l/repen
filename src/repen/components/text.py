@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import Optional, Set, cast
+from typing import Optional, Set
 
 from repen.components.base import Component, Composite
 
