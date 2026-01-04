@@ -1,9 +1,10 @@
 from typing import Dict, List, Type, Union
 
 from repen.components import (Component, Composite, Figure, Image, Metric,
-                              MetricsGroup, Text, TextBlock, TextLines,
-                              TextSpan, VStack)
+                              MetricsGroup, Table, TableHeader, TableRow, Text,
+                              TextBlock, TextLines, TextSpan, VStack)
 from repen.renderers.base import Renderer
+from repen.renderers.html.datatable import JS_DATA_TABLE, JS_JQUERY
 from repen.renderers.html.processor import (HTMLComponentProcessor,
                                             HTMLCompositeProcessor)
 from repen.renderers.html.processor_figure import HTMLFigureProcessor
@@ -11,6 +12,9 @@ from repen.renderers.html.processor_image import HTMLImageProcessor
 from repen.renderers.html.processor_layout import HTMLVStackProcessor
 from repen.renderers.html.processor_metric import (HTMLMetricProcessor,
                                                    HTMLMetricsGroupProcessor)
+from repen.renderers.html.processor_table import (HTMLTableHeaderProcessor,
+                                                  HTMLTableProcessor,
+                                                  HTMLTableRowProcessor)
 from repen.renderers.html.processor_text import (HTMLTextBlockProcessor,
                                                  HTMLTextLinesProcessor,
                                                  HTMLTextProcessor,
@@ -40,6 +44,10 @@ class HTMLRenderer(Renderer):
             Figure: HTMLFigureProcessor(),
             # Metrics
             MetricsGroup: HTMLMetricsGroupProcessor(),
+            # Table
+            Table: HTMLTableProcessor(),
+            TableHeader: HTMLTableHeaderProcessor(),
+            TableRow: HTMLTableRowProcessor(),
         }
 
     def render(self, title: str, root: Component) -> Union[str, bytes]:
@@ -55,6 +63,10 @@ class HTMLRenderer(Renderer):
 <head>
     <title>{title}</title>
     <style>{self._theme_registry.css(self._theme)}</style>
+    <script>
+        {JS_JQUERY}
+        {JS_DATA_TABLE}
+    </script>
 </head>
 <body>
 """
@@ -62,7 +74,13 @@ class HTMLRenderer(Renderer):
 
     def end(self) -> None:
         self._output.append(
-            """</body>
+            """
+       <script>
+            $("table").each(function() {{
+                $(this).DataTable();
+            }});
+       </script>
+   </body>
 </html>
 """
         )

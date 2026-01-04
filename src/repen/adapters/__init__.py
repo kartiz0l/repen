@@ -6,7 +6,16 @@ from repen.adapters.image import (BytesImageAdapter, PathImageAdapter,
 from repen.adapters.metric import (MetricsFromDictAdapter,
                                    MetricsFromListAdapter)
 from repen.adapters.registry import AdapterRegistry
+from repen.adapters.table import PandasTableAdapter
 from repen.adapters.text import TextAdapter
+
+# Table
+try:
+    import pandas
+
+    AdapterRegistry.register(PandasTableAdapter())
+except:
+    pass
 
 # Metrics
 AdapterRegistry.register(MetricsFromDictAdapter())

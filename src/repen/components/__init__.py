@@ -4,6 +4,7 @@ from repen.components.generic import Generic
 from repen.components.image import Image, ImageFormat
 from repen.components.layout import HStack, Layout, Spacing, VStack
 from repen.components.metric import Metric, MetricsGroup, MetricVariant
+from repen.components.table import Table, TableHeader, TableRow
 from repen.components.text import (Text, TextBlock, TextLike, TextLines,
                                    TextSection, TextSpan, TextStyle,
                                    TextVariant)
@@ -37,4 +38,8 @@ __all__ = [
     "Metric",
     "MetricsGroup",
     "MetricVariant",
+    # Table
+    "Table",
+    "TableHeader",
+    "TableRow",
 ]

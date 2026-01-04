@@ -1,5 +1,6 @@
 from typing import Dict
 
+from repen.renderers.html.datatable import CSS_DATA_TABLE
 from repen.renderers.html.theme import HTMLTheme
 
 CSS_RESET = """
@@ -91,6 +92,7 @@ class HTMLDefaultTheme(HTMLTheme):
     def styles(self) -> str:
         return f"""
 {CSS_RESET}
+{CSS_DATA_TABLE}
 
 body {{
     background-color: var(--color-bg);
