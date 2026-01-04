@@ -4,10 +4,10 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "repen"
-version = "0.0.1"
+version = "0.1.0"
 description = "Automation engine for report generation"
 authors = [
-  { name="Alexander Sherstnev", email="a.sharstniou.dev@gmail.com" },
+  { name="Aliaksandr Sharstniou", email="a.sharstniou.dev@gmail.com" },
 ]
 readme = "README.md"
 requires-python = ">=3.12"
