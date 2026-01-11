@@ -44,6 +44,15 @@ try:
 except:
     pass
 
+try:
+    import cv2
+    import numpy
+    from repen.adapters.image import OpenCVImageAdapter
+
+    AdapterRegistry.register(OpenCVImageAdapter())
+except:
+    pass
+
 # Text
 AdapterRegistry.register(TextAdapter())
 

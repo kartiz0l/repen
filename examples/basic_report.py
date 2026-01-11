@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import cv2 as cv
 import matplotlib.pyplot as plt
 import pandas as pd
 from repen import Report
@@ -35,6 +38,10 @@ ax.set_xlabel("Month")
 ax.set_ylabel("Sales (K)")
 ax.set_title("Sales Trend")
 report.add(fig)
+
+# OpenCV
+cv_image = cv.imread(str(Path(__file__).parent / "basic_image.png"))
+report.add(cv_image)
 
 # Render and save
 report.save("sales_report.html")

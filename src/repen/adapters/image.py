@@ -13,7 +13,7 @@ class ImageAdapter(ComponentAdapter):
     def __init__(self, priority: int = 1) -> None:
         super().__init__(priority)
 
-    def _bytes_to_base64(self, data: bytes) -> str:
+    def _bytes_to_base64(self, data: Any) -> str:
         return base64.b64encode(data).decode("utf-8")
 
 
@@ -142,3 +142,26 @@ class SVGImageAdapter(ImageAdapter):
         svg_match = re.search(r"<svg.*</svg>", svg_content, re.DOTALL)
         clean_svg = svg_match.group(0) if svg_match else svg_content
         return Image(clean_svg, ImageFormat.SVG, **metadata)
+
+
+class OpenCVImageAdapter(ImageAdapter):
+    def can_adapt(self, raw_data: Any, **metadata: Any) -> bool:
+        try:
+            import cv2 as cv
+            import numpy as np
+
+            if not isinstance(raw_data, np.ndarray):
+                return False
+
+            success, _ = cv.imencode(".png", raw_data)
+            return bool(success)
+        except:
+            return False
+
+    def adapt(self, raw_data: Any, **metadata: Any) -> Component:
+        import cv2 as cv
+
+        _, content = cv.imencode(".png", raw_data)
+        image_data = self._bytes_to_base64(content)
+
+        return Image(image_data, ImageFormat.PNG, **metadata)
