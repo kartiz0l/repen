@@ -64,3 +64,7 @@ report.add(fig)
 # Render and save
 report.save("sales_report.html")
 ```
+
+Output:
+
+![Basic usage](doc/basic_report_output.png)
