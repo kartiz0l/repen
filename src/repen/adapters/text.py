@@ -19,47 +19,42 @@ class TextAdapter(ComponentAdapter):
             return Text("", **metadata)
 
         paragraphs = re.split(r"\n\n", text)
-        if len(paragraphs) == 1:
-            return self._parse_paragraph(paragraphs[0], **metadata)
-
         stack = TextSection(**metadata)
         for paragraph in paragraphs:
-            stack.add(self._parse_paragraph(paragraph, **metadata))
+            lines = [line.strip() for line in paragraph.split("  \n")]
+            lines_component = TextLines(**metadata)
+            for line in lines:
+                heading_match = re.match(r"^(#+)\s+(.+)$", line)
+                if heading_match:
+                    level = len(heading_match.group(1))
+                    content = heading_match.group(2).strip()
+                    variant_map = {
+                        1: TextVariant.HEADING_1,
+                        2: TextVariant.HEADING_2,
+                        3: TextVariant.HEADING_3,
+                        4: TextVariant.HEADING_4,
+                        5: TextVariant.HEADING_5,
+                    }
+                    variant = variant_map.get(level, TextVariant.HEADING_6)
+                    block = TextBlock(variant, **metadata)
+                    block.add(self._parse_inline(content, **metadata))
+                    stack.add(block)
+                else:
+                    lines_component.add(self._parse_inline(line, **metadata))
+
+            num_lines = len(lines_component.children)
+            if num_lines > 0:
+                block = TextBlock(TextVariant.PARAGRAPH, **metadata)
+                if num_lines == 1:
+                    block.add(lines_component.children[0], **metadata)
+                else:
+                    block.add(lines_component, **metadata)
+                stack.add(block)
+
+        if len(stack.children) == 1:
+            return stack.children[0]
+
         return stack
-
-    def _parse_paragraph(self, text: str, **metadata) -> Component:
-        lines = [line.strip() for line in text.split("  \n")]
-        if len(lines) == 1:
-            return self._parse_line(lines[0], **metadata)
-
-        lines_component = TextLines(**metadata)
-        for line in lines:
-            lines_component.add(self._parse_inline(line, **metadata))
-
-        block = TextBlock(TextVariant.PARAGRAPH, **metadata)
-        block.add(lines_component, **metadata)
-        return block
-
-    def _parse_line(self, line: str, **metadata) -> Component:
-        heading_match = re.match(r"^(#+)\s+(.+)$", line)
-        if heading_match:
-            level = len(heading_match.group(1))
-            content = heading_match.group(2).strip()
-            variant_map = {
-                1: TextVariant.HEADING_1,
-                2: TextVariant.HEADING_2,
-                3: TextVariant.HEADING_3,
-                4: TextVariant.HEADING_4,
-                5: TextVariant.HEADING_5,
-            }
-            variant = variant_map.get(level, TextVariant.HEADING_6)
-            block = TextBlock(variant, **metadata)
-            block.add(self._parse_inline(content, **metadata))
-            return block
-
-        block = TextBlock(TextVariant.PARAGRAPH, **metadata)
-        block.add(self._parse_inline(line, **metadata))
-        return block
 
     def _simplify_component(self, component: Component, **metadata) -> Component:
         if isinstance(component, TextSpan):
@@ -69,7 +64,6 @@ class TextAdapter(ComponentAdapter):
             texts = []
             same_styles = None
             all_text = True
-
             for child in component.children:
                 if isinstance(child, Text):
                     texts.append(child.content)
@@ -88,7 +82,9 @@ class TextAdapter(ComponentAdapter):
         return component
 
     def _is_text_start_with_delimiter_at_position(
-        self, text: str, pos: int
+        self,
+        text: str,
+        pos: int,
     ) -> Optional[str]:
         delimiters = ["**", "__", "~~", "++", "*", "_", "`"]
         for delim in delimiters:
